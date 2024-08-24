@@ -10,7 +10,7 @@ ${CHROME_PROFILE_PATH}    C:\\Users\\Muzammil\\AppData\\Local\\Google\\Chrome\\U
 
 *** Keywords ***
 
-Open Chrome Browser in Debug mode and connect
+Open Chrome Browser in Debug mode 
     [Documentation]    keyword opens chrome browser in debug mode
     [Arguments]    ${url}   
     Close any open chrome browser instance 
@@ -19,12 +19,12 @@ Open Chrome Browser in Debug mode and connect
     Sleep    2s
     ${chrome_options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
     Call Method    ${chrome_options}    add_experimental_option    debuggerAddress    127.0.0.1:${DEBUG_PORT}
-    Call Method     ${chrome_options}    add_argument    --headless
+    #Call Method     ${chrome_options}    add_argument    --headless
     Create WebDriver    Chrome    options=${chrome_options}
     Go To    ${url}
     Set Browser Implicit Wait   10s 
 
-Open Headless Chrome With User Profile
+Open Chrome In Headless Mode
     
     [Arguments]    ${url}
     Close any open chrome browser instance
