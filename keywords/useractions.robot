@@ -16,15 +16,31 @@ ${email_sender_names}     xpath=(//table[@class="F cf zt"])[last()]//tbody//tr/t
 ${email_sender_title}    xpath=(//table[@class="F cf zt"])[last()]//tbody//tr/td[4]//div[2]//span//span
 ${email_sender_date}    xpath=(//table[@class="F cf zt"])[last()]//tbody//tr/td[8]//span//span
 ${next_toggle}    xpath=(//div[@class="Cr aqJ"]/div//span[@class="Di"]//div[last()])[last()]
-
+${promotion_emails_empty_validation}    xpath=//div[text()="Your Promotions tab is empty."]
 *** Keywords ***
 Delete all promotions email
     [Documentation]    keyword to delete all promotion emails
     Click Element    ${promotions tag}
     Click Element    ${select all}
-    Click Element    ${select all conversations text}
-    Click Element    ${bin}    
-    Click Element    ${ok_btn}
+    ${status}    Run Keyword And Return Status     Element Should Not Be Visible    ${promotion_emails_empty_validation}
+    IF  '${status}'!='False'
+
+        TRY
+        Click Element    ${select all conversations text}
+        Click Element    ${bin}
+        Click Element    ${ok_btn} 
+        EXCEPT
+            Log     LESS THAN 50 MAILS ARE PRESENT, SELECT ALL CONVERSATION OPTION NOT VISIBLE
+            Click Element    ${bin} 
+        END
+        Log To Console    all promotion emails have been deleted
+
+    ELSE    
+        Log  No promotion emails are present    
+    END
+
+    
+   
 
 
 Extract all information about emails
